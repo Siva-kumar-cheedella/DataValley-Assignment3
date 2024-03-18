@@ -1,0 +1,32 @@
+import java.io.*;
+
+public class SerializationDemo {
+    public static void main(String[] args) {
+        Customer customer = new Customer(1, "John Doe", "1234567890", "123 Street, City");
+
+        serializeCustomer(customer, "JavaObject.txt");
+
+        Customer deserializedCustomer = deserializeCustomer("JavaObject.txt");
+        System.out.println("Deserialized Customer object: " + deserializedCustomer);
+    }
+
+    private static void serializeCustomer(Customer customer, String filename) {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filename))) {
+            outputStream.writeObject(customer);
+            System.out.println("Customer object serialized to " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Customer deserializeCustomer(String filename) {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename))) {
+            Customer deserializedCustomer = (Customer) inputStream.readObject();
+            System.out.println("Customer object deserialized from " + filename);
+            return deserializedCustomer;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
